@@ -1,0 +1,30 @@
+//Modificações no método de Login no MakroWeb.
+
+1 - Adicionar um método para calcular o hash MD5 no Home.aspx.cs 
+antes do método  protected void BtnLogar_Click:
+
+2 - Abaixo o método:
+public string getMD5Hash(string input)
+    {
+      System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+      byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+      byte[] hash = md5.ComputeHash(inputBytes);
+      System.Text.StringBuilder sb = new System.Text.StringBuilder();
+      for (int i = 0; i < hash.Length; i++)
+      {
+        sb.Append(hash[i].ToString("X2"));
+      }
+      return sb.ToString();
+    }
+
+3 - Alterar o método BtnLogar_Click:
+Ao receber o parametro de senha "EditSenha.Text"
+
+De:	  cmd.Parameters.AddWithValue("@Senha", EditSenha.Text); 
+Para: cmd.Parameters.AddWithValue("@Senha", getMD5Hash(EditSenha.Text)); 
+
+4 - Criado um usuário para testes:
+Usuário: tstEvt
+Senha: 1234 ( no banco o hash fica: 81dc9bdb52d04dc20036dbd8313ed055, que é o equivalente (1234) )
+
+	
